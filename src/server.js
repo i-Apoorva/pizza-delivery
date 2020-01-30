@@ -6,7 +6,7 @@ const logger = require('morgan');
 var mongoose   = require('mongoose'); 
 const axios = require('axios');
 const router = express.Router();
-var routes = require('./routes/router');
+var routes = require('./router');
 const environment = process.env.NODE_ENV; // development
 const stage = require('./config')[environment];
 var mongoDB =String(process.env.DB_URL);
@@ -30,6 +30,11 @@ app.get('/', function(req, res) {
 });
 
 app.use('/api/', routes);
+// app.use((err, request, response, next) => {
+//   // your logic to send error
+// req.flash('error_msg', mappingFile[err.message]); // mapping file is key value pair of code and user friendly messages
+// });
+
 
 app.listen(`${stage.port}`, () => {
   console.log(`Server now listening at localhost:${stage.port}`);

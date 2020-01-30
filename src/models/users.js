@@ -21,7 +21,9 @@ const UserSchema = new Schema({
   },
   email: String,
   address: String,
-  streetAddress: String
+  streetAddress: String,
+  createdAt: Date,
+  updatedAt: Date
 });
 
 
@@ -43,4 +45,4 @@ UserSchema.pre('save', function(next) {
     }
   });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema, 'users');

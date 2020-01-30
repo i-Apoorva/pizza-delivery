@@ -1,10 +1,11 @@
-var User= require('../models/users');
+var User= require('./models/users');
 var express = require('express');
 var router = express.Router(); 
 const bcrypt = require('bcrypt');
 var mongoose   = require('mongoose');
-const controller = require('../controllers/users.controller');
-const validateToken = require('../utils').validateToken;
+const UserController = require('./controllers/users.controller');
+const MenuController = require('./controllers/menu.controller');
+const validateToken = require('./utils').validateToken;
 const jwt = require('jsonwebtoken');
 
 router.get('/', function(req,res){ //for /api/
@@ -56,7 +57,7 @@ router.get('/user/:userId', function(req,res){  // get specific user user
     })  
 });
 
-router.post('/user', function(req, res){
+router.post('/user',function(req, res, next){
 
     var user = new User();      
         user.name = req.body.name;
@@ -64,10 +65,17 @@ router.post('/user', function(req, res){
         user.password = req.body.password;
         user.address = req.body.address;
         user.streetAddress = req.body.streetAddress;
+        user.createdAt= new Date();
+        user.updatedAt= new Date();
         user.save(function(err) {
-            if (err)
-                res.send(err);
+            if (err) {
+                if (err.code == 11000 && err.message.indexOf('users.$email_1') > -1) 
+                    res.json({message: 'user already exists'});
+                   next();
+                
+            }
             res.json({ message: 'New pizza user created!' });
+              
         });
 });
 
@@ -78,6 +86,7 @@ router.put('/user/:userId', function(req, res) {
         user.password = req.body.password ? req.body.password: user.password;
         user.address = req.body.address ? req.body.address: user.address ;
         user.streetAddress = req.body.streetAddress ? req.body.streetAddress : user.streetAddress;
+        user.updatedAt = new Date();
         user.save(function(err) {
             if (err)
                 res.send(err);
@@ -100,7 +109,10 @@ router.delete('/user/:userId', function(req, res) {
 });
 
 router.route('/login')
- .post(controller.login)
+ .post(UserController.login)
+
+ router.route('/menu')
+  .get(MenuController.getMenu)
 
 
 

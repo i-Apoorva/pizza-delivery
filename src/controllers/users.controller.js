@@ -22,7 +22,7 @@ module.exports = {
                   if (match) {
                     // Create a token
                     const payload = { user: user.name };
-                    const options = { expiresIn: '2d', issuer: 'https://scotch.io' };
+                    const options = { expiresIn: '2d', issuer: 'https://apoorva.io' };
                     const secret = process.env.JWT_SECRET;
                     const token = jwt.sign(payload, secret, options);
                     
