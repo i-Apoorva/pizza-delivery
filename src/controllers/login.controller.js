@@ -9,24 +9,27 @@ module.exports = {
     // }
 
     login: (req, res) => {
-        const { name, password } = req.body;
+        const { email, password } = req.body;
         console.log("body",req.body);
     
         mongoose.connect(String(process.env.DB_URL), { useNewUrlParser: true }, (err) => {
+          console.log("body",req.body);
+    
           let result = {};
           let status = 200;
           if(!err) {
-            User.findOne({name}, (err, user) => {
+            User.findOne({email}, (err, user) => {
               if (!err && user) {
                 bcrypt.compare(password, user.password).then(match => {
                   if (match) {
                     // Create a token
-                    const payload = { user: user.name };
+                    const payload = { user: user.email };
                     const options = { expiresIn: '2d', issuer: 'https://apoorva.io' };
                     const secret = process.env.JWT_SECRET;
                     const token = jwt.sign(payload, secret, options);
                     
                     console.log('TOKEN', token);
+                    
                     result.token = token;
                     result.status = status;
                     result.result = user;

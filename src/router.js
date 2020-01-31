@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router(); 
 const bcrypt = require('bcrypt');
 var mongoose   = require('mongoose');
-const UserController = require('./controllers/users.controller');
+const LoginController = require('./controllers/login.controller.js');
 const MenuController = require('./controllers/menu.controller');
 const validateToken = require('./utils').validateToken;
 const jwt = require('jsonwebtoken');
@@ -13,16 +13,14 @@ router.get('/', function(req,res){ //for /api/
 
 });
 
-router.get('/user',validateToken, function(req,res){  // get all users info
+router.get('/users',validateToken, function(req,res){  // get all users info
     let result = {};
     let status = 200;
     mongoose.connect(String(process.env.DB_URL), { useNewUrlParser: true }, (err) => {
     if (!err) {
         const payload = req.decoded;
-        // TODO: Log the payload here to verify that it's the same payload
-        //  we used when we created the token
         console.log('PAYLOAD', payload);
-        if (payload && payload.user === 'admin') {
+        if (payload && payload.user === 'admin@gmail.com') {
           User.find({}, (err, users) => {
             if (!err) {
               result.status = status;
@@ -109,10 +107,10 @@ router.delete('/user/:userId', function(req, res) {
 });
 
 router.route('/login')
- .post(UserController.login)
+ .post(LoginController.login)
 
  router.route('/menu')
-  .get(MenuController.getMenu)
+  .get(validateToken, MenuController.getMenu)
 
 
 
