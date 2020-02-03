@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 var mongoose   = require('mongoose');
 const LoginController = require('./controllers/login.controller.js');
 const MenuController = require('./controllers/menu.controller');
+const CartController = require('./controllers/cart.controller');
 const validateToken = require('./utils').validateToken;
 const jwt = require('jsonwebtoken');
 
@@ -111,6 +112,13 @@ router.route('/login')
 
  router.route('/menu')
   .get(validateToken, MenuController.getMenu)
+
+router.route('/cart/update')
+   .post(CartController.update)
+
+router.route('/cart')
+    .post(CartController.add)
+
 
 
 

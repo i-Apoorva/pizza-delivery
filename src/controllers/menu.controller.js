@@ -1,5 +1,6 @@
 var mongoose   = require('mongoose');
 var Menu = require('../models/menuItem');
+const validateToken = require('../utils').validateToken;
 
 module.exports = {
     getMenu: (req, res) => {
@@ -8,8 +9,6 @@ module.exports = {
     mongoose.connect(String(process.env.DB_URL), { useNewUrlParser: true }, (err) => {
     if (!err) {
         const payload = req.decoded;
-        // TODO: Log the payload here to verify that it's the same payload
-        //  we used when we created the token
         console.log('PAYLOAD', payload);
         if (payload) {
           Menu.find({}, (err, users) => {
