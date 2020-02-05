@@ -1,36 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <%- include('../partials/head') %>
-</head>
-<body class="container">
-
-<header>
+<%- include('../partials/head') %>
     <%- include('../partials/header') %>
-</header>
-
-<main>
-<div class="row">
-    <div class="col-sm-8">    
-        <div class="jumbotron">
-            <h1>PIZZA EXPRESS!!</h1>
-            <p>What would you like to order today</p>
-        </div>
-    </div>
-
+    <div class="card-columns" id="menuItemsContainer">
     <div class="col-sm-4">        
         <div class="well">
             <h3>Look I'm the Menu Sidebar!</h3>
-                 
+              <table>
+                <tr>
+                  <th>Name</th>
+                  <th>Price</th>
+                </tr>
+        <% result.forEach(function(obj){ %>
+                <tr>
+                  <td><%=obj.name%></td>
+                  <td><%=obj.price%></td>
+                </tr>
+                <%})%>
+        </table>   
         </div>
+    </div>
     </div>
 
 </div>
-</main>
 
 <footer>
     <%- include('../partials/footer') %>
 </footer>
-
-</body>
-</html>

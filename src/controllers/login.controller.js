@@ -38,7 +38,8 @@ module.exports = {
                     result.status = status;
                     result.error = 'Authentication error';
                   }
-                  res.status(status).send(result);
+                  //res.status(status).send(result);
+                  res.render('pages/menu');
                 }).catch(err => {
                   status = 500;
                   result.status = status;

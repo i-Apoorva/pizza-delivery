@@ -49,6 +49,18 @@ router.get('/users',validateToken, function(req,res){  // get all users info
     });
 });
 
+router.get('/user/create',function(req,res){
+    res.render('pages/userAccountCreate');
+    console.log('usercreate');
+})
+
+router.get('/user/login',function(req,res){
+    res.render('pages/login');
+    console.log('login');
+})
+
+
+
 
 router.get('/user/:userId', function(req,res){  // get specific user user
     User.findById(req.params.userId, (err, user) => {
@@ -73,7 +85,7 @@ router.post('/user',function(req, res, next){
                    next();
                 
             }
-            res.json({ message: 'New pizza user created!' });
+            res.render('pages/menu');
               
         });
 });
@@ -107,17 +119,20 @@ router.delete('/user/:userId', function(req, res) {
     })
 });
 
-router.route('/login')
+router.route('/login/tokens')
  .post(LoginController.login)
 
  router.route('/menu')
-  .get(validateToken, MenuController.getMenu)
+  .get(MenuController.getMenu)
 
 router.route('/cart/update')
    .post(CartController.update)
 
 router.route('/cart')
     .post(CartController.add)
+
+router.route('/cart/read')
+    .get(CartController.show)
 
 
 

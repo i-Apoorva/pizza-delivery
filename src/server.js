@@ -10,6 +10,7 @@ const axios = require('axios');
 const router = express.Router();
 var path = require('path');
 var routes = require('./router');
+const http= require('http');
 const Security = require('./security');
 const environment = process.env.NODE_ENV; // development
 const stage = require('./config')[environment];
@@ -30,6 +31,7 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({useNewUrlParser: true, extended: true} ));
 app.use(bodyParser.json());
+app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -55,12 +57,6 @@ db.once('open', function() {
 app.get('/', function(req, res) {
   res.render('pages/index');
 });
-
-
-
-app.get('/menu', function(req, res) {
-  res.render('pages/menu');
-})
 
 app.get('/test', (req, res) => {
   res.send(req.session.test); // 'OK'

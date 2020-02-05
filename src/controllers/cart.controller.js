@@ -29,6 +29,12 @@ if(Security.isValidNonce(req.body.nonce, req)) {
 } else {
     res.redirect('/');
 }
+},
+
+show: (req, res) => {
+    console.log('cart display');
+    res.render('pages/cart');
+
 }
 
 }
