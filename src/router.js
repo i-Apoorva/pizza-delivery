@@ -68,7 +68,7 @@ router.get('/user/:userId', function(req,res){  // get specific user user
     })  
 });
 
-router.post('/user',function(req, res, next){
+router.post('/user/create',function(req, res, next){
 
     var user = new User();      
         user.name = req.body.name;
@@ -85,7 +85,7 @@ router.post('/user',function(req, res, next){
                    next();
                 
             }
-            res.render('pages/menu');
+            res.render('pages/index');
               
         });
 });
@@ -121,6 +121,10 @@ router.delete('/user/:userId', function(req, res) {
 
 router.route('/login/tokens')
  .post(LoginController.login)
+
+ router.get('/login', function(req,res) {
+     res.render('pages/login');
+ })
 
  router.route('/menu')
   .get(MenuController.getMenu)

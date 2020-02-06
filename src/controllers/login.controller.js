@@ -33,13 +33,14 @@ module.exports = {
                     result.token = token;
                     result.status = status;
                     result.result = user;
+                    res.render('pages/index');
                   } else {
                     status = 401;
                     result.status = status;
                     result.error = 'Authentication error';
                   }
-                  //res.status(status).send(result);
-                  res.render('pages/menu');
+                  res.status(status).send(result);
+                  
                 }).catch(err => {
                   status = 500;
                   result.status = status;

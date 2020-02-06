@@ -31,7 +31,7 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({useNewUrlParser: true, extended: true} ));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -46,17 +46,11 @@ db.once('open', function() {
     console.log("Connection Successful!");
   });
 
-// app.get('/', function(req, res) {
-//     res.json({ message: 'hooray! welcome to our api!' });  
-//     // if(!req.session.test) {
-//     //   req.session.test = 'OK';
-//     //   res.send('OK');
-//     // } 
-// });
-
 app.get('/', function(req, res) {
   res.render('pages/index');
 });
+
+
 
 app.get('/test', (req, res) => {
   res.send(req.session.test); // 'OK'
