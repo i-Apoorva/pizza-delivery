@@ -1,6 +1,7 @@
 var mongoose   = require('mongoose');
 var Menu = require('../models/menuItem');
 const validateToken = require('../utils').validateToken;
+const Security = require('../security');
 
 module.exports = {
     getMenu: (req, res) => {
@@ -38,20 +39,24 @@ module.exports = {
     //   }
     // });
 
-    let result = {};
+    let products = {};
     let status = 200;
 
     mongoose.connect(String(process.env.DB_URL), { useNewUrlParser: true }, (err) => {
       if (!err) {
      
-    Menu.find({}, (err, users) => {
+    Menu.find({}, (err, result) => {
       if (!err) {
-        result.status = status;
-        result.error = err;
-        result.result = users;
+        products.status = status;
+        products.error = err;
+        products.result = result;
       } 
       // res.status(status).send(result);
-      res.render('pages/menu', result);
+      res.render('pages/menu',  {
+        products: products.result,
+        nonce: Security.md5(req.sessionID + req.headers['user-agent'])
+      });
+      
     });
   }
 });

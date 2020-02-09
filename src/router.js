@@ -3,9 +3,11 @@ var express = require('express');
 var router = express.Router(); 
 const bcrypt = require('bcrypt');
 var mongoose   = require('mongoose');
+const UserController = require('./controllers/user.controller');
 const LoginController = require('./controllers/login.controller.js');
 const MenuController = require('./controllers/menu.controller');
 const CartController = require('./controllers/cart.controller');
+const CheckoutController = require('./controllers/checkout.controller');
 const validateToken = require('./utils').validateToken;
 const jwt = require('jsonwebtoken');
 
@@ -14,40 +16,9 @@ router.get('/', function(req,res){ //for /api/
 
 });
 
-router.get('/users',validateToken, function(req,res){  // get all users info
-    let result = {};
-    let status = 200;
-    mongoose.connect(String(process.env.DB_URL), { useNewUrlParser: true }, (err) => {
-    if (!err) {
-        const payload = req.decoded;
-        console.log('PAYLOAD', payload);
-        if (payload && payload.user === 'admin@gmail.com') {
-          User.find({}, (err, users) => {
-            if (!err) {
-              result.status = status;
-              result.error = err;
-              result.result = users;
-            } else {
-              status = 500;
-              result.status = status;
-              result.error = err;
-            }
-            res.status(status).send(result);
-          });
-        } else {
-          status = 401;
-          result.status = status;
-          result.error = `Authentication error`;
-          res.status(status).send(result);
-        }
-      } else {
-        status = 500;
-        result.status = status;
-        result.error = err;
-        res.status(status).send(result);
-      }
-    });
-});
+router.route('/users')
+   .get(UserController.get,validateToken )
+
 
 router.get('/user/create',function(req,res){
     res.render('pages/userAccountCreate');
@@ -60,35 +31,15 @@ router.get('/user/login',function(req,res){
 })
 
 
-
-
 router.get('/user/:userId', function(req,res){  // get specific user user
     User.findById(req.params.userId, (err, user) => {
         res.json(user)
     })  
 });
 
-router.post('/user/create',function(req, res, next){
-
-    var user = new User();      
-        user.name = req.body.name;
-        user.email = req.body.email;
-        user.password = req.body.password;
-        user.address = req.body.address;
-        user.streetAddress = req.body.streetAddress;
-        user.createdAt= new Date();
-        user.updatedAt= new Date();
-        user.save(function(err) {
-            if (err) {
-                if (err.code == 11000 && err.message.indexOf('users.$email_1') > -1) 
-                    res.json({message: 'user already exists'});
-                   next();
-                
-            }
-            res.render('pages/index');
-              
-        });
-});
+router.route('/user/create')
+     .post(UserController.create)
+     
 
 router.put('/user/:userId', function(req, res) {
     User.findById(req.params.userId, (err, user) => {
@@ -137,6 +88,16 @@ router.route('/cart')
 
 router.route('/cart/read')
     .get(CartController.show)
+
+router.route("/cart/remove/:id/:nonce")
+    .get(CartController.remove)
+
+router.route('/cart/empty/:nonce')
+    .get(CartController.empty)
+
+router.route('/checkout')
+    .get(CheckoutController.read)
+    .post(CheckoutController.post)
 
 
 
