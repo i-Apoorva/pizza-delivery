@@ -40,7 +40,6 @@ update: (req, res) => {
 
 show: (req, res) => {
     console.log('cart display');
-    console.log(req.session.cart);
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
     res.render('pages/cart', {
@@ -54,9 +53,14 @@ show: (req, res) => {
 remove: (req,res) => {
     let id = req.params.id;
    if(/^\d+$/.test(id) && Security.isValidNonce(req.params.nonce, req)) {
-       Cart.removeFromCart(parseInt(id, 10), req.session.cart);
-       console.log('remove item');
-       res.redirect('/api/cart/read');
+        console.log('remove item');
+        console.log("id to remove", id);
+       let cart = Cart.removeFromCart(parseInt(id, 10), req.session.cart);
+       res.render('pages/cart', {
+        pageTitle: 'Cart',
+        cart: cart,
+        nonce: Security.md5(req.sessionID + req.headers['user-agent'])
+    });
    } else {
        res.redirect('/');
    }

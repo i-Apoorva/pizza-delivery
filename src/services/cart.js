@@ -43,7 +43,7 @@ addToCart(product = null, qty = 1) {
         let format = new Intl.NumberFormat(config.locale.lang, {style: 'currency', currency: config.locale.currency });
         let prod = {
           id: product.id,
-          title: product.title,
+          title: product.name,
           price: product.price,
           qty: qty,
           image: product.image,
@@ -63,10 +63,12 @@ saveCart(request) {
 removeFromCart(id = 0) {
     for(let i = 0; i < this.data.items.length; i++) {
         let item = this.data.items[i];
-        console.log("id to remove", id);
+        console.log("id to remove--->is", id);
         if(item.id === id) {
             this.data.items.splice(i, 1);
             this.calculateTotals();
+            console.log('item deleted', this.data);
+            return this.data;
         }
     }
 
