@@ -7,30 +7,16 @@ module.exports = {
   let qty = parseInt(req.body.qty, 10);
   let product = parseInt(req.body.product_id, 10);
   if(qty > 0 && Security.isValidNonce(req.body.nonce, req)) {
-    
-    let prod = { _id: '5e32c957de0c321700a28ae2',
-        id: 7,
-        name: 'Pizza Gold',
-        price: 250,
-        image: 'pizza1.png' };
-        
-        Cart.addToCart(prod, qty);
-        Cart.saveCart(req);
-        console.log('Saved to cart');
-        //res.redirect('api/cart');
-        console.log(req);
-        /*
     Products.findOne({id: product}).then(prod => {
         Cart.addToCart(prod, qty);
         Cart.saveCart(req);
         console.log('Saved to cart');
-        res.redirect('api/cart');
+        res.redirect('/api/menu');
         console.log(req);
     }).catch(err => {
        res.redirect('/api/menu');
        console.log('Cant add to cart. Could not find product.');
-    });
-    */
+    });  
 
 } else {
     res.redirect('/api/menu');
@@ -54,7 +40,7 @@ update: (req, res) => {
 
 show: (req, res) => {
     console.log('cart display');
-    console.log(req.session);
+    console.log(req.session.cart);
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
     res.render('pages/cart', {
@@ -69,7 +55,8 @@ remove: (req,res) => {
     let id = req.params.id;
    if(/^\d+$/.test(id) && Security.isValidNonce(req.params.nonce, req)) {
        Cart.removeFromCart(parseInt(id, 10), req.session.cart);
-       res.redirect('/cart');
+       console.log('remove item');
+       res.redirect('/api/cart/read');
    } else {
        res.redirect('/');
    }
@@ -78,7 +65,8 @@ remove: (req,res) => {
 empty: (req,res) => {
     if(Security.isValidNonce(req.params.nonce, req)) {
         Cart.emptyCart(req);
-        res.redirect('/cart');
+        console.log('empty cart');
+        res.redirect('/api/cart/read');
     } else {
         res.redirect('/');
     }

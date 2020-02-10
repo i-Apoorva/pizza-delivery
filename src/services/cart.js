@@ -39,11 +39,11 @@ setFormattedTotals() {
 }
 
 addToCart(product = null, qty = 1) {
-    if(!this.inCart(product.id)) {
+    if(!this.inCart(product.product_id)) {
         let format = new Intl.NumberFormat(config.locale.lang, {style: 'currency', currency: config.locale.currency });
         let prod = {
           id: product.id,
-          title: product.name,
+          title: product.title,
           price: product.price,
           qty: qty,
           image: product.image,
@@ -63,6 +63,7 @@ saveCart(request) {
 removeFromCart(id = 0) {
     for(let i = 0; i < this.data.items.length; i++) {
         let item = this.data.items[i];
+        console.log("id to remove", id);
         if(item.id === id) {
             this.data.items.splice(i, 1);
             this.calculateTotals();
@@ -82,6 +83,33 @@ emptyCart(request) {
     }
 
 
+}
+
+updateCart(ids = [], qtys = []) {
+    let map = [];
+    let updated = false;
+
+    ids.forEach(id => {
+       qtys.forEach(qty => {
+          map.push({
+              id: parseInt(id, 10),
+              qty: parseInt(qty, 10)
+          });
+       });
+    });
+    map.forEach(obj => {
+        this.data.items.forEach(item => {
+           if(item.id === obj.id) {
+               if(obj.qty > 0 && obj.qty !== item.qty) {
+                   item.qty = obj.qty;
+                   updated = true;
+               }
+           }
+        });
+    });
+    if(updated) {
+        this.calculateTotals();
+    }
 }
 
 }
