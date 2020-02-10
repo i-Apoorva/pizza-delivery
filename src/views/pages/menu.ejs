@@ -9,7 +9,7 @@
                     <img src="/pizza1.png" alt="" class="img-thumbnail img-responsive">
                 </figure>
                 <div class="cart-data">
-                    <form action="/api/cart" method="post">
+                    <form action="../../api/cart" method="post">
                         <div>
                             <span class="price">
                                 <%= product.price %>
@@ -19,7 +19,7 @@
                                 <input type="text" name="qty" class="qty" value="1">
                                 <span class="qty-plus"><i class="fa fa-plus"></i></span>
                             </span>
-                            <input type="hidden" name="product_id" value="<%= product.product_id %>">
+                            <input type="hidden" name="product_id" value="<%= product.id %>">
                             <input type="hidden" name="nonce" value="<%= nonce %>">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-cart-plus"></i>

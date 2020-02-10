@@ -2,7 +2,7 @@
     <%- include('../partials/head') %>
         <%- include('../partials/header') %>
 
-    
+        <% if( status== 200) { %>   
 <div class="jumbotron">
     <h1 class="display-4">Pizza Delivery</h1>
     <p class="lead">Welcome to pizza delivery service. This is the place when you may chose the most delicious pizza you like from wide variety of options!</p>
@@ -13,6 +13,10 @@
         <a class="btn btn-dark btn-lg loggedIn" href="../../api/menu/" role="button">Go to the Menu</a>
     </p>
 </div>
-<footer>
-    <%- include('../partials/footer') %>
-</footer>
+
+<% } else { %>
+    <p class="alert alert-info"> Authentication error.</p>
+    <% } %>
+    <footer>
+        <%- include('../partials/footer') %>
+    </footer>

@@ -7,17 +7,34 @@ module.exports = {
   let qty = parseInt(req.body.qty, 10);
   let product = parseInt(req.body.product_id, 10);
   if(qty > 0 && Security.isValidNonce(req.body.nonce, req)) {
-    Products.findOne({product_id: product}).then(prod => {
+    
+    let prod = { _id: '5e32c957de0c321700a28ae2',
+        id: 7,
+        name: 'Pizza Gold',
+        price: 250,
+        image: 'pizza1.png' };
+        
         Cart.addToCart(prod, qty);
         Cart.saveCart(req);
+        console.log('Saved to cart');
+        //res.redirect('api/cart');
+        console.log(req);
+        /*
+    Products.findOne({id: product}).then(prod => {
+        Cart.addToCart(prod, qty);
+        Cart.saveCart(req);
+        console.log('Saved to cart');
         res.redirect('api/cart');
+        console.log(req);
     }).catch(err => {
        res.redirect('/api/menu');
-       console.log('cant add cart');
+       console.log('Cant add to cart. Could not find product.');
     });
+    */
+
 } else {
     res.redirect('/api/menu');
-    console.log('cant add cart');
+    console.log('cant add cart. Quantity should be grater than 0.');
 }
 },
 
@@ -37,6 +54,7 @@ update: (req, res) => {
 
 show: (req, res) => {
     console.log('cart display');
+    console.log(req.session);
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
     res.render('pages/cart', {

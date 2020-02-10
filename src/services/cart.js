@@ -39,11 +39,11 @@ setFormattedTotals() {
 }
 
 addToCart(product = null, qty = 1) {
-    if(!this.inCart(product.product_id)) {
+    if(!this.inCart(product.id)) {
         let format = new Intl.NumberFormat(config.locale.lang, {style: 'currency', currency: config.locale.currency });
         let prod = {
-          id: product.product_id,
-          title: product.title,
+          id: product.id,
+          title: product.name,
           price: product.price,
           qty: qty,
           image: product.image,
