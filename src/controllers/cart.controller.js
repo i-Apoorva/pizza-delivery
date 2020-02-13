@@ -25,14 +25,15 @@ module.exports = {
 },
 
 update: (req, res) => {
-    let ids = req.body["product_id[]"];
-    let qtys = req.body["qty[]"];
+    let ids = req.body.product_id;
+    let qtys = req.body.qty;
     if(Security.isValidNonce(req.body.nonce, req)) {
         let cart = (req.session.cart) ? req.session.cart : null;
         let i = (!Array.isArray(ids)) ? [ids] : ids;
         let q = (!Array.isArray(qtys)) ? [qtys] : qtys;
+        console.log('with cart', cart, i, q);
         Cart.updateCart(i, q, cart);
-        res.redirect('/api/cart');
+        res.redirect('/api/cart/read');
     } else {
         res.redirect('/api/menu');
     }
@@ -42,6 +43,7 @@ show: (req, res) => {
     console.log('cart display');
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
+    console.log('cart read is', cart);
     res.render('pages/cart', {
         pageTitle: 'Cart',
         cart: cart,
@@ -56,6 +58,8 @@ remove: (req,res) => {
         console.log('remove item');
         console.log("id to remove", id);
        let cart = Cart.removeFromCart(parseInt(id, 10), req.session.cart);
+       console.log('cart after removal',cart);
+       //res.redirect('/api/cart/read');
        res.render('pages/cart', {
         pageTitle: 'Cart',
         cart: cart,

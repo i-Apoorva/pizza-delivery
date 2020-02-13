@@ -37,6 +37,10 @@ router.get('/user/:userId', function(req,res){  // get specific user user
     })  
 });
 
+router.get('/user/profile', function(req,res){
+    res.render('pages/userProfile');
+});
+
 router.route('/user/create')
      .post(UserController.create)
      

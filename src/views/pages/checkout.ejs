@@ -1,0 +1,24 @@
+<%- include('../partials/head') %>
+    <%- include('../partials/header') %>
+<div>
+    <% if(cart && cart.items.length > 0) { %>
+    <form id="userOrderCreate" action="/api/checkout" method="POST">
+        <p class="formSuccess mb-3 alert alert-success"> Please, select a payment method</p>
+        <div class="form-group">
+            <label for="paymentSource">Credit Card</label>
+            <input type="text" id="paymentSource" name="paymentSource" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <p>Order Total: <%= cart.formattedTotals %><b id="orderTotal"></b></p>
+        </div>
+        <button type="submit" class="btn btn-dark">Checkout</button>
+    </form>
+    <% } else { %>
+        <p class="formError mb-3 alert alert-danger">
+            Sorry, your basket is empty!
+        </p>
+        <% } %>
+</div>
+<footer>
+    <%- include('../partials/footer') %>
+</footer>

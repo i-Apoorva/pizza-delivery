@@ -4,7 +4,8 @@ module.exports= {
     read: (req, res) => {
         let sess = req.session;
         let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
-        res.render('checkout', {
+        console.log('checkout', req.session);
+        res.render('pages/checkout', {
             pageTitle: 'Checkout',
             cart: cart,
             checkoutDone: false,
