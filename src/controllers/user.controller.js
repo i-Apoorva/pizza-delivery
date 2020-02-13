@@ -54,7 +54,7 @@ module.exports = {
                    next();
                 
             }
-            res.render('pages/index');
+            res.render('pages/index',{ status: 200});
               
         }); 
     }

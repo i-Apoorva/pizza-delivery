@@ -32,7 +32,12 @@ update: (req, res) => {
         let i = (!Array.isArray(ids)) ? [ids] : ids;
         let q = (!Array.isArray(qtys)) ? [qtys] : qtys;
         Cart.updateCart(i, q, cart);
-        res.redirect('/api/cart');
+        res.render('pages/cart', {
+            pageTitle: 'Cart',
+            cart: cart,
+            nonce: Security.md5(req.sessionID + req.headers['user-agent'])
+        });
+    
     } else {
         res.redirect('/api/menu');
     }
@@ -42,6 +47,7 @@ show: (req, res) => {
     console.log('cart display');
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
+    console.log('cart is', cart);
     res.render('pages/cart', {
         pageTitle: 'Cart',
         cart: cart,
@@ -56,6 +62,7 @@ remove: (req,res) => {
         console.log('remove item');
         console.log("id to remove", id);
        let cart = Cart.removeFromCart(parseInt(id, 10), req.session.cart);
+       Cart.saveCart(req);
        res.render('pages/cart', {
         pageTitle: 'Cart',
         cart: cart,

@@ -1,6 +1,6 @@
-'use strict';
 
 const config = require('../config');
+const ShoppingCart = require('../models/shoppingCart');
 
 class Cart {
    constructor() {
@@ -54,7 +54,7 @@ addToCart(product = null, qty = 1) {
     }
 }
 
-saveCart(request) {
+saveCart(request, res) {
     if(request.session) {
         request.session.cart = this.data;
     }
