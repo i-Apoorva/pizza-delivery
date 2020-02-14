@@ -33,16 +33,13 @@ update: (req, res) => {
         let q = (!Array.isArray(qtys)) ? [qtys] : qtys;
         console.log('with cart', cart, i, q);
         Cart.updateCart(i, q, cart);
-<<<<<<< HEAD
         res.redirect('/api/cart/read');
-=======
         res.render('pages/cart', {
             pageTitle: 'Cart',
             cart: cart,
             nonce: Security.md5(req.sessionID + req.headers['user-agent'])
         });
-    
->>>>>>> 9d62996be25a4be7922f8d911bd927a7c464eb32
+
     } else {
         res.redirect('/api/menu');
     }
@@ -52,11 +49,8 @@ show: (req, res) => {
     console.log('cart display');
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
-<<<<<<< HEAD
     console.log('cart read is', cart);
-=======
     console.log('cart is', cart);
->>>>>>> 9d62996be25a4be7922f8d911bd927a7c464eb32
     res.render('pages/cart', {
         pageTitle: 'Cart',
         cart: cart,
@@ -71,12 +65,8 @@ remove: (req,res) => {
         console.log('remove item');
         console.log("id to remove", id);
        let cart = Cart.removeFromCart(parseInt(id, 10), req.session.cart);
-<<<<<<< HEAD
        console.log('cart after removal',cart);
-       //res.redirect('/api/cart/read');
-=======
        Cart.saveCart(req);
->>>>>>> 9d62996be25a4be7922f8d911bd927a7c464eb32
        res.render('pages/cart', {
         pageTitle: 'Cart',
         cart: cart,
