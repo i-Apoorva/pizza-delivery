@@ -4,7 +4,11 @@ module.exports= {
     read: (req, res) => {
         let sess = req.session;
         let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
+<<<<<<< HEAD
         console.log('checkout', req.session);
+=======
+        console.log('cart', cart);
+>>>>>>> 9d62996be25a4be7922f8d911bd927a7c464eb32
         res.render('pages/checkout', {
             pageTitle: 'Checkout',
             cart: cart,
