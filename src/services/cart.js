@@ -40,6 +40,7 @@ setFormattedTotals() {
 
 addToCart(product = null, qty = 1) {
     if(!this.inCart(product.product_id)) {
+        console.log("product--------->", product);
         let format = new Intl.NumberFormat(config.locale.lang, {style: 'currency', currency: config.locale.currency });
         let prod = {
           id: product.id,

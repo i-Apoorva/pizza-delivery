@@ -4,6 +4,7 @@ const Cart= require('../services/cart');
 
 module.exports = {
   add:  (req, res) => {
+      console.log("req------>", req.body);
   let qty = parseInt(req.body.qty, 10);
   let product = parseInt(req.body.product_id, 10);
   if(qty > 0 && Security.isValidNonce(req.body.nonce, req)) {
@@ -33,7 +34,7 @@ update: (req, res) => {
         let q = (!Array.isArray(qtys)) ? [qtys] : qtys;
         console.log('with cart', cart, i, q);
         Cart.updateCart(i, q, cart);
-        res.redirect('/api/cart/read');
+        //res.redirect('/api/cart/read');
         res.render('pages/cart', {
             pageTitle: 'Cart',
             cart: cart,
@@ -48,8 +49,8 @@ update: (req, res) => {
 show: (req, res) => {
     console.log('cart display');
     let sess = req.session;
+    console.log(req.session);
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
-    console.log('cart read is', cart);
     console.log('cart is', cart);
     res.render('pages/cart', {
         pageTitle: 'Cart',

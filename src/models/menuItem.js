@@ -6,8 +6,7 @@ const MenuItemSchema = new Schema({
        id: Number,
        name: String,
        price: Number,
-       image: String,
-       quantity: Number
+       image: String
 
 });
 
