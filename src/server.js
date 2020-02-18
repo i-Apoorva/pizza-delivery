@@ -23,7 +23,7 @@ const store = new MongoDBStore({
 app.use(session({
   secret: 'secret session key',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store: store,
   unset: 'destroy',
   name: 'session cookie name'
