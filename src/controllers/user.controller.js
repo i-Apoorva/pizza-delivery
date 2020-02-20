@@ -57,6 +57,35 @@ module.exports = {
             res.render('pages/index',{ status: 200});
               
         }); 
+    },
+
+    update: (req, res) => {
+      User.findById(req.params.userId, (err, user) => {
+        user.name = req.body.name ? req.body.name :user.name ;
+        user.email = req.body.email ? req.body.email: user.email;
+        user.password = req.body.password ? req.body.password: user.password;
+        user.address = req.body.address ? req.body.address: user.address ;
+        user.streetAddress = req.body.streetAddress ? req.body.streetAddress : user.streetAddress;
+        user.updatedAt = new Date();
+        user.save(function(err) {
+            if (err)
+                res.send(err);
+            res.json({ message: 'User info updated!' });
+        })
+    }) 
+    },
+
+    delete: (req,res) => {
+      User.findById(req.params.userId, (err, user) => {
+        user.remove(err => {
+            if(err){
+                res.status(500).send(err)
+            }
+            else{
+                res.json({ message: 'User deleted!' });  
+            }
+        })
+    })
     }
 
 }

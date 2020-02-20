@@ -18,7 +18,7 @@ module.exports= {
         let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
     if(Security.isValidNonce(req.body.nonce, req)) {
-        res.render('checkout', {
+        res.render('pages/checkout', {
             pageTitle: 'Checkout',
             cart: cart,
             checkoutDone: true

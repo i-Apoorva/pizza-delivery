@@ -50,12 +50,14 @@ module.exports = {
         products.status = status;
         products.error = err;
         products.result = result;
-        // console.log(products.result);
+      console.log(result);
       } 
       // res.status(status).send(result);
       res.render('pages/menu',  {
         products: products.result,
-        nonce: Security.md5(req.sessionID + req.headers['user-agent'])
+        nonce: Security.md5(req.sessionID + req.headers['user-agent'],
+        ),
+        csrfToken: req.csrfToken()
       });
       
     });

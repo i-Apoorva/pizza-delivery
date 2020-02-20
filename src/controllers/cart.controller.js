@@ -1,91 +1,47 @@
+var express = require('express');
+var router = express.Router();
 const Security = require('../security');
 const Products = require('../models/menuItem');
+const Orders= require('../models/orders');
 const Cart= require('../services/cart');
 
-module.exports = {
-  add:  (req, res) => {
-      console.log("req------>", req.body);
-  let qty = parseInt(req.body.qty, 10);
-  let product = parseInt(req.body.product_id, 10);
-  if(qty > 0 && Security.isValidNonce(req.body.nonce, req)) {
-    Products.findOne({id: product}).then(prod => {
-        Cart.addToCart(prod, qty);
-        Cart.saveCart(req);
-        console.log('Saved to cart');
-        res.redirect('/api/menu');
-        console.log(req);
-    }).catch(err => {
-       res.redirect('/api/menu');
-       console.log('Cant add to cart. Could not find product.');
-    });  
+router.get('/add-to-cart/:id', function(req, res, next) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
 
-} else {
-    res.redirect('/api/menu');
-    console.log('cant add cart. Quantity should be grater than 0.');
-}
-},
-
-update: (req, res) => {
-    let ids = req.body.product_id;
-    let qtys = req.body.qty;
-    if(Security.isValidNonce(req.body.nonce, req)) {
-        let cart = (req.session.cart) ? req.session.cart : null;
-        let i = (!Array.isArray(ids)) ? [ids] : ids;
-        let q = (!Array.isArray(qtys)) ? [qtys] : qtys;
-        console.log('with cart', cart, i, q);
-        Cart.updateCart(i, q, cart);
-        //res.redirect('/api/cart/read');
-        res.render('pages/cart', {
-            pageTitle: 'Cart',
-            cart: cart,
-            nonce: Security.md5(req.sessionID + req.headers['user-agent'])
-        });
-
-    } else {
-        res.redirect('/api/menu');
-    }
-},
-
-show: (req, res) => {
-    console.log('cart display');
-    let sess = req.session;
-    console.log(req.session);
-    let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
-    console.log('cart is', cart);
-    res.render('pages/cart', {
-        pageTitle: 'Cart',
-        cart: cart,
-        nonce: Security.md5(req.sessionID + req.headers['user-agent'])
+    Product.findById(productId, function(err, product) {
+       if (err) {
+           return res.redirect('/');
+       }
+        cart.add(product, product.id);
+        req.session.cart = cart;
+        console.log(req.session.cart);
+        res.redirect('/menu');
     });
+});
 
-},
+router.get('/reduce/:id', function(req, res, next) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
 
-remove: (req,res) => {
-    let id = req.params.id;
-   if(/^\d+$/.test(id) && Security.isValidNonce(req.params.nonce, req)) {
-        console.log('remove item');
-        console.log("id to remove", id);
-       let cart = Cart.removeFromCart(parseInt(id, 10), req.session.cart);
-       console.log('cart after removal',cart);
-       Cart.saveCart(req);
-       res.render('pages/cart', {
-        pageTitle: 'Cart',
-        cart: cart,
-        nonce: Security.md5(req.sessionID + req.headers['user-agent'])
-    });
-   } else {
-       res.redirect('/');
-   }
-},
+    cart.reduceByOne(productId);
+    req.session.cart = cart;
+    res.redirect('/shopping-cart');
+});
 
-empty: (req,res) => {
-    if(Security.isValidNonce(req.params.nonce, req)) {
-        Cart.emptyCart(req);
-        console.log('empty cart');
-        res.redirect('/api/cart/read');
-    } else {
-        res.redirect('/');
-    }
-}
+router.get('/remove/:id', function(req, res, next) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
 
-}
+    cart.removeItem(productId);
+    req.session.cart = cart;
+    res.redirect('/shopping-cart');
+});
+
+router.get('/shopping-cart', function(req, res, next) {
+   if (!req.session.cart) {
+       return res.render('pages/cart', {products: null});
+   } 
+    var cart = new Cart(req.session.cart);
+    res.render('pages/cart', {products: cart.generateArray(), totalPrice: cart.totalPrice});
+});

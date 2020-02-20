@@ -2,16 +2,14 @@ require('dotenv').config();
 var express = require('express');
 var app  = express(); 
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 const logger = require('morgan');
 var mongoose   = require('mongoose'); 
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-const axios = require('axios');
-const router = express.Router();
+const flash= require('connect-flash');
 var path = require('path');
 var routes = require('./router');
-const http= require('http');
-const Security = require('./security');
 const environment = process.env.NODE_ENV; // development
 const stage = require('./config')[environment];
 var mongoDB =String(process.env.DB_URL);
@@ -20,20 +18,22 @@ const store = new MongoDBStore({
   collection: 'sessions'
 });
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(flash());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({useNewUrlParser: true, extended: true} ));
+app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(session({
-  secret: 'secret session key',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store: store,
   unset: 'destroy',
-  name: 'session cookie name'
+  name: 'session cookie name',
+  cookie: { maxAge: 180 * 60 * 1000 }
 }));
-
-app.use(bodyParser.urlencoded({useNewUrlParser: true, extended: true} ));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
 
 if (environment !== 'production') {
   app.use(logger('dev'));
@@ -46,31 +46,7 @@ db.once('open', function() {
     console.log("Connection Successful!");
   });
 
-app.get('/', function(req, res) {
-  res.render('pages/index', {status: 200});
-});
-
-
-
-app.get('/test', (req, res) => {
-  res.send(req.session.test); // 'OK'
-});
-
-app.post('/test', (req, res) => {
-  let token = req.body.nonce;
-  if(Security.isValidNonce(token, req)) {
-    // OK
-  } else {
-    // Reject the request
-  }
-});
-
-app.use('/api/', routes);
-// app.use((err, request, response, next) => {
-//   // your logic to send error
-// req.flash('error_msg', mappingFile[err.message]); // mapping file is key value pair of code and user friendly messages
-// });
-
+app.use('/', routes);
 
 app.listen(`${stage.port}`, () => {
   console.log(`Server now listening at localhost:${stage.port}`);

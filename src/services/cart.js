@@ -6,6 +6,7 @@ class Cart {
    constructor() {
       this.data = {};
       this.data.items = [];
+      this.data.totalQty=0;
       this.data.totals = 0;
       this.data.formattedTotals = '';
    }
@@ -39,6 +40,8 @@ setFormattedTotals() {
 }
 
 addToCart(product = null, qty = 1) {
+    var storedItem= this.data.items[product.product_id];
+    console.log('stored item', storedItem);
     if(!this.inCart(product.product_id)) {
         console.log("product--------->", product);
         let format = new Intl.NumberFormat(config.locale.lang, {style: 'currency', currency: config.locale.currency });
@@ -53,6 +56,7 @@ addToCart(product = null, qty = 1) {
         this.data.items.push(prod);
         this.calculateTotals();
     }
+
 }
 
 saveCart(request, res) {

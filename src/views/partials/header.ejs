@@ -1,19 +1,28 @@
-
 <body class="container">
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-    
-        <div class="navbar-header">
-            <ul class="nav navbar-nav">
-                <li><a class="navbar-brand" href="/">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+        
+            <div class="navbar-header">
+                <ul class="nav navbar-nav">
+                    <li>
+                    <a class="navbar-brand" href="/">
                     <img src="/logo.png" style="max-width: 60px;margin-bottom: 100px;" alt="logo">
-                </a></li>
-                <li><a href="/api/menu">Menu</a></li>
-                <li><a href="/api/cart/read">Cart</a></li>
-                <li><a href="/api/user/profile">Profile</a></li>
-                <li><a href="/api/login">Logout</a></li>
-            </ul>
+                    </a>
+                  </li>
+                    <li><a href="/menu"><i class="fas fa-pizza-slice"></i> Menu</a></li>
+                    <li><a href="/cart/read"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> User
+                            <span class="badge"> x</span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/user/about">About</a></li>
+                            <li><a href="/user/login">Logout</a></li>
+                          </ul>
+                      </li>
+                </ul>
+            </div>
+        
         </div>
-    
-    </div>
-    </nav>
+        </nav>
