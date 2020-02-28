@@ -54,20 +54,20 @@ router.route('/user/login/tokens')
  router.route('/menu')
   .get(MenuController.getMenu)
 
-router.route('/cart/update')
-   .post(CartController.update)
+// router.route('/cart/update')
+//    .post(CartController.update)
 
-router.route('/cart')
-    .post(CartController.add)
+// router.route('/cart')
+//     .post(CartController.add)
 
-router.route('/cart/read')
-    .get(CartController.show)
+// router.route('/cart/read')
+//     .get(CartController.show)
 
-router.route("/cart/remove/:id/:nonce")
-    .get(CartController.remove)
+// router.route("/cart/remove/:id/:nonce")
+//     .get(CartController.remove)
 
-router.route('/cart/empty/:nonce')
-    .get(CartController.empty)
+// router.route('/cart/empty/:nonce')
+//     .get(CartController.empty)
 
 router.route('/checkout')
     .get(CheckoutController.read)

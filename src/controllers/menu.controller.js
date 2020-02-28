@@ -50,7 +50,6 @@ module.exports = {
         products.status = status;
         products.error = err;
         products.result = result;
-      console.log(result);
       } 
       // res.status(status).send(result);
       res.render('pages/menu',  {

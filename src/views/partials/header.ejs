@@ -10,11 +10,12 @@
                     </a>
                   </li>
                     <li><a href="/menu"><i class="fas fa-pizza-slice"></i> Menu</a></li>
-                    <li><a href="/cart/read"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+                    <li><a href="/cart/show-cart"><i class="fas fa-shopping-cart"></i> Cart
+                        <span class="badge"> <%= session.cart.totalQty ? session.cart.totalQty : 0 %></span></a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user"></i> User
-                            <span class="badge"> x</span>
+                            
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/user/about">About</a></li>

@@ -8,25 +8,13 @@
                 <figure class="product-image">
                     <img src="<%= product.image %>" alt="" class="img-thumbnail img-responsive">
                 </figure>
-                <div class="cart-data">
-                    <form action="cart/"  method="post">
+                <div class="thumbnail">
                         <div>
-                            <span class="price">
-                                <%= product.price %>
-                            </span>
-                            <span class="qty-wrap">
-                                <span class="qty-minus"><i class="fa fa-minus"></i></span>
-                                <input type="text" name="qty" class="qty" value="1">
-                                <span class="qty-plus"><i class="fa fa-plus"></i></span>
-                            </span>
-                            <input type="hidden" name="product_id" value="<%= product.id %>">
-                            <input type="hidden" name="nonce" value="<%= nonce %>">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-cart-plus"></i>
-                            </button>
+                            <div class="clearfix">
+                                <div class="price pull-left">$<%= product.price %></div>
+                                <a href="/cart/add-to-cart/<%= product._id %>" class="btn btn-success pull-right" role="button">Add to Shopping Cart</a>
+                            </div> 
                         </div>
-                    </form>
                 </div>
             </li>
             <% if(i % 3 === 0) {%><div class="clearfix"></div><% } %>

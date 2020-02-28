@@ -10,6 +10,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const flash= require('connect-flash');
 var path = require('path');
 var routes = require('./router');
+var CartRoutes= require('./controllers/cart.controller');
 const environment = process.env.NODE_ENV; // development
 const stage = require('./config')[environment];
 var mongoDB =String(process.env.DB_URL);
@@ -26,7 +27,7 @@ app.use(bodyParser.urlencoded({useNewUrlParser: true, extended: true} ));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: "my-secret-sesssion",
   resave: false,
   saveUninitialized: false,
   store: store,
@@ -46,6 +47,13 @@ db.once('open', function() {
     console.log("Connection Successful!");
   });
 
+  app.use(function(req, res, next) {
+    //res.locals.login = req.isAuthenticated();
+    res.locals.session = req.session;
+    next();
+});
+
+app.use('/cart', CartRoutes);
 app.use('/', routes);
 
 app.listen(`${stage.port}`, () => {
